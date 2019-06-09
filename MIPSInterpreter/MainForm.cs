@@ -38,6 +38,9 @@ namespace MIPSInterpreter
 
         private void RunButton_Click(object sender, EventArgs e)
         {
+            if (States == null) return;
+            States.RunAll();
+            DisplayState();
         }
 
         private void NextButton_Click(object sender, EventArgs e)
@@ -60,6 +63,7 @@ namespace MIPSInterpreter
             regView.DataSource = States.CurrentState.registers.ToList();
             InstructionTextBox.Text = States.CurrentState.instrString;
             errorBox.Text = States.eMessage;
+            ProgramBox.SelectedIndex = States.CurrentState.line;
         }
     }
 }

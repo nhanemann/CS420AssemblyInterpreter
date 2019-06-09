@@ -25,11 +25,11 @@ namespace MIPSInterpreter
             CurrentState = sList[0];
         }
 
-        public void Next()
+        public bool Next()
         {
             if (CurrentState.registers == null || (eMessage != "" && index == ProgramStrings.Length-1))
             {
-                return;
+                return false;
             }
             if (index == sList.Count - 1)
             {
@@ -37,24 +37,26 @@ namespace MIPSInterpreter
                 if (newState == null)
                 {
                     eMessage = CurrentState.eMessage;
-                    return;
+                    return false;
                 }
                 int nextInstr = CalculateJump(newState.jumpLocation);
                 if (nextInstr >= ProgramStrings.Length)
                 {
                     eMessage = "Jump out of bounds";
-                    return;
+                    return false;
                 }
                 State s = new State(ProgramStrings[nextInstr], newState);
+                s.line = line;
                 sList.Add(s);
                 CurrentState = sList[++index];
-                return;
+                return true;
             }
             if (index < sList.Count)
             {
                 CurrentState = sList[++index];
-                return;
+                return true;
             }
+            return false;
         }
 
         public void Previous()
@@ -74,6 +76,11 @@ namespace MIPSInterpreter
             }
             eMessage = "Bad jump label";
             return ProgramStrings.Length;
+        }
+
+        public void RunAll()
+        {
+            while (Next()) ;
         }
     }
 }

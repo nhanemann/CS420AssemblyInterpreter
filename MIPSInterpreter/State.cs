@@ -12,6 +12,7 @@ namespace MIPSInterpreter
         private Instruction instr;
         public string instrString;
         public string eMessage = "";
+        public int line = 0;
 
         public State(string arg, RegList reg)
         {
