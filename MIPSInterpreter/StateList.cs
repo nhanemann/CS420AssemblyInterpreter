@@ -8,6 +8,11 @@ namespace MIPSInterpreter
 {
     class StateList
     {
+        /// <summary>
+        /// List of states. Contains navigation
+        /// functions to run forwards and backwards
+        /// through the program.
+        /// </summary>
         private List<State> sList;
         private int index;
         public State CurrentState;
@@ -21,7 +26,7 @@ namespace MIPSInterpreter
             index = 0;
             line = 0;
             sList = new List<State>();
-            sList.Add(new State(program[0], new RegList(0)));
+            sList.Add(new State(program[0], new RegList(0), 0));
             CurrentState = sList[0];
         }
 
@@ -31,32 +36,32 @@ namespace MIPSInterpreter
             {
                 return false;
             }
-            if (index == sList.Count - 1)
-            {
-                RegList newState = CurrentState.NextState();
-                if (newState == null)
-                {
-                    eMessage = CurrentState.eMessage;
-                    return false;
-                }
-                int nextInstr = CalculateJump(newState.jumpLocation);
-                if (nextInstr >= ProgramStrings.Length)
-                {
-                    eMessage = "Jump out of bounds";
-                    return false;
-                }
-                State s = new State(ProgramStrings[nextInstr], newState);
-                s.line = line;
-                sList.Add(s);
-                CurrentState = sList[++index];
-                return true;
-            }
-            if (index < sList.Count)
+            if (index < sList.Count - 1)
             {
                 CurrentState = sList[++index];
                 return true;
             }
-            return false;
+            return BuildNext();
+        }
+
+        public bool BuildNext()
+        {
+            RegList newState = CurrentState.NextState();
+            if (newState == null)
+            {
+                eMessage = CurrentState.eMessage;
+                return false;
+            }
+            int nextInstr = CalculateJump(newState.jumpLocation);
+            if (nextInstr >= ProgramStrings.Length)
+            {
+                eMessage = "Jump out of bounds";
+                return false;
+            }
+            State s = new State(ProgramStrings[nextInstr], newState, line);
+            sList.Add(s);
+            CurrentState = sList[++index];
+            return true;
         }
 
         public void Previous()

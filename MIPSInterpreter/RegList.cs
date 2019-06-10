@@ -8,6 +8,12 @@ namespace MIPSInterpreter
 {
     class RegList : Dictionary<string , int>
     {
+        /// <summary>
+        /// RegList is an inherited dictionary with
+        /// 2 extra constructors and an extra data
+        /// field, plus a function to validate that
+        /// registers are being used properly.
+        /// </summary>
         public Tuple<int, string> jumpLocation = new Tuple<int, string>(-1, "");
 
         public RegList(int k)

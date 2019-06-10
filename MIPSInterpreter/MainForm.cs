@@ -13,6 +13,10 @@ namespace MIPSInterpreter
 {
     public partial class MainForm : Form
     {
+        /// <summary>
+        /// UI class. Contains UI buttons and
+        /// other UI functionality.
+        /// </summary>
         string[] AssemblyProgram;
         StateList States = null;
 
@@ -25,7 +29,7 @@ namespace MIPSInterpreter
         {
             if (!File.Exists("Assembly.txt"))
             {
-                Application.Exit();
+                MessageBox.Show("No assembly file found.");
             }
             else
             {

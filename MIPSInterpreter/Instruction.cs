@@ -10,6 +10,13 @@ namespace MIPSInterpreter
 {
     class Instruction
     {
+        /// <summary>
+        /// Instruction class. Contains functions
+        /// to execute and aid in executing an
+        /// instruction from a string.
+        /// At the bottom, there is a section detailing
+        /// all of the implemented assembly
+        /// </summary>
         public string eMessage = "";
         private RegList registers = new RegList(0);
         private string[] instructionInfo;
